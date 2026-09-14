@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://futuretechcareerhub.github.io/ai-learning-roadmap/sitemap.xml
