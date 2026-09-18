@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="RAG vs AI Agents explained with architecture, use cases, tools, limitations, enterprise examples and guidance on when to use RAG, agents or both.">
+<meta name="robots" content="index, follow">
+<title>RAG vs AI Agents: Architecture, Use Cases, Tools & When to Use Each</title>
+<link rel="canonical" href="https://futuretechcareerhub.github.io/ai-learning-roadmap/blogs/rag-vs-ai-agents.html">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Article",
+  "headline":"RAG vs AI Agents: Architecture, Use Cases, Tools & When to Use Each",
+  "description":"A practical comparison of Retrieval-Augmented Generation and AI agents, including architecture, use cases, tools, security, evaluation and agentic RAG.",
+  "datePublished":"2026-09-18",
+  "dateModified":"2026-09-18",
+  "author":{"@type":"Organization","name":"Future Tech Career Hub"},
+  "publisher":{"@type":"Organization","name":"Future Tech Career Hub"},
+  "mainEntityOfPage":{"@type":"WebPage","@id":"https://futuretechcareerhub.github.io/ai-learning-roadmap/blogs/rag-vs-ai-agents.html"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"BreadcrumbList",
+  "itemListElement":[
+    {"@type":"ListItem","position":1,"name":"AI Learning Roadmap","item":"https://futuretechcareerhub.github.io/ai-learning-roadmap/"},
+    {"@type":"ListItem","position":2,"name":"Latest AI Blogs","item":"https://futuretechcareerhub.github.io/ai-learning-roadmap/blogs/"},
+    {"@type":"ListItem","position":3,"name":"RAG vs AI Agents","item":"https://futuretechcareerhub.github.io/ai-learning-roadmap/blogs/rag-vs-ai-agents.html"}
+  ]
+}
+</script>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;line-height:1.75;color:#1f2937;background:#f8fafc}.container{width:min(100% - 32px,950px);margin:auto}header{background:#111827;color:#fff;padding:44px 20px}h1{margin:0 0 12px;font-size:clamp(2rem,5vw,3rem);line-height:1.2}h2{margin-top:40px;color:#111827;line-height:1.3}h3{margin-top:28px;color:#1f2937}a{color:#b91c1c;text-decoration:none;font-weight:600}a:hover{text-decoration:underline}.meta{color:#d1d5db}.answer,.note,.comparison{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:22px;margin:24px 0}.answer{border-left:4px solid #b91c1c}.table-wrap{overflow-x:auto;margin:20px 0}table{width:100%;border-collapse:collapse;background:#fff}th,td{border:1px solid #e5e7eb;padding:13px;text-align:left;vertical-align:top}th{background:#f3f4f6}.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:20px 0}.flow div{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:16px}.faq{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:18px;margin:12px 0}footer{margin-top:50px;padding:28px 20px;background:#111827;color:#d1d5db;text-align:center}@media(max-width:600px){.container{width:min(100% - 24px,950px)}header{padding:36px 16px}}
+</style>
+</head>
+<body>
+<header><div class="container">
+<p><a href="../" style="color:#fff">AI Learning Roadmap</a> · <a href="./" style="color:#fff">AI Blogs</a></p>
+<h1>RAG vs AI Agents: Architecture, Use Cases, Tools & When to Use Each</h1>
+<p class="meta">Published September 18, 2026 · Practical guide for AI learners, developers and teams designing knowledge-enabled AI systems</p>
+</div></header>
+<main class="container">
+<section class="answer">
+<h2>Quick answer: RAG vs AI Agents</h2>
+<p><strong>RAG (Retrieval-Augmented Generation)</strong> is primarily a knowledge-grounding pattern: the application retrieves relevant information from external sources and gives that context to a language model before generating an answer. <strong>AI agents</strong> are systems that can pursue a goal by deciding what actions or tools to use, often in multiple steps, and evaluating intermediate results.</p>
+<p>So the two are not direct substitutes. If the main problem is <strong>“How can the model answer from our documents or current knowledge?”</strong>, RAG is often the relevant pattern. If the problem is <strong>“How can the system decide what to do and execute several actions?”</strong>, an agent pattern may be appropriate. If the system needs both reliable knowledge and multi-step action, <strong>RAG and agents can be combined</strong> as agentic RAG.</p>
+</section>
+
+<section>
+<h2>What is RAG?</h2>
+<p>Retrieval-Augmented Generation adds an external retrieval step to an LLM application. Instead of asking the model to answer only from its pretrained knowledge, the application searches a knowledge source, selects relevant content and supplies it as context for generation.</p>
+<p>A typical RAG system therefore has two broad parts: an indexing pipeline that prepares knowledge for search, and an inference pipeline that retrieves relevant information for each query. Production design can involve chunking, embeddings, metadata, vector or keyword search, hybrid retrieval, reranking, prompt construction and evaluation. Microsoft describes standard RAG as a fixed sequence in which an orchestrator accepts a query, retrieves information, assembles context and then calls the language model. urlMicrosoft's RAG architecture guidancehttps://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/rag/rag-solution-design-and-evaluation-guide</p>
+<div class="flow"><div><strong>1. User query</strong><br>Question or information need</div><div><strong>2. Retrieval</strong><br>Search relevant documents or records</div><div><strong>3. Context</strong><br>Select and assemble useful evidence</div><div><strong>4. LLM</strong><br>Generate a grounded response</div></div>
+<h3>What RAG is good at</h3>
+<ul>
+<li>Answering questions over internal documentation.</li>
+<li>Grounding responses in domain-specific or frequently updated information.</li>
+<li>Searching product manuals, policies, support content and technical documentation.</li>
+<li>Building knowledge assistants where the main task is retrieve, synthesize and explain.</li>
+</ul>
+<p>RAG does not automatically make an application an autonomous agent. Retrieval can be one deterministic stage in a fixed pipeline.</p>
+</section>
+
+<section>
+<h2>What is an AI Agent?</h2>
+<p>An AI agent is an application pattern in which a model can reason about a goal, select from available tools or actions, observe results and continue until it reaches a stopping condition. The exact architecture varies, but tool use and an iterative decision loop are common building blocks.</p>
+<p>A useful mental model is: <strong>RAG gives an AI system access to information; an agent gives it a mechanism for choosing and executing actions.</strong> In enterprise architectures, agents may use model access, tools, knowledge bases and memory, with security, observability and governance spanning those components. urlAWS agentic AI enterprise architecture guidancehttps://docs.aws.amazon.com/prescriptive-guidance/latest/govern-architect-agentic-ai/enterprise-architecture.html</p>
+<h3>What agents are good at</h3>
+<ul>
+<li>Breaking a complex task into multiple steps.</li>
+<li>Choosing among tools based on the current task.</li>
+<li>Calling APIs, databases, calculators or business systems.</li>
+<li>Checking intermediate results and deciding what to do next.</li>
+<li>Combining information retrieval with actions in a single workflow.</li>
+</ul>
+</section>
+
+<section>
+<h2>RAG vs AI Agents: the core difference</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Aspect</th><th>RAG</th><th>AI Agent</th></tr></thead>
+<tbody>
+<tr><td>Primary purpose</td><td>Retrieve relevant knowledge and ground generation</td><td>Achieve a goal through reasoning, tool use and actions</td></tr>
+<tr><td>Typical flow</td><td>Query → retrieve → context → generate</td><td>Goal → plan/decide → tool → observe → repeat → respond</td></tr>
+<tr><td>Decision making</td><td>Usually designed into the pipeline</td><td>Often delegated partly to the model and agent runtime</td></tr>
+<tr><td>Tools</td><td>Retrieval/search is central; other tools are optional</td><td>Tools and actions are central</td></tr>
+<tr><td>Knowledge</td><td>External knowledge is retrieved for context</td><td>May use RAG, APIs, databases, memory or other sources</td></tr>
+<tr><td>Best fit</td><td>Knowledge questions and grounded generation</td><td>Multi-step tasks and action-oriented workflows</td></tr>
+<tr><td>Complexity</td><td>Often simpler to control and evaluate</td><td>Usually adds orchestration, tool and state complexity</td></tr>
+<tr><td>Example</td><td>“What does our refund policy say?”</td><td>“Check this order, identify the issue and create a support ticket.”</td></tr>
+</tbody></table></div>
+</section>
+
+<section>
+<h2>RAG architecture vs AI agent architecture</h2>
+<h3>Standard RAG architecture</h3>
+<p>In standard RAG, the retrieval path is generally predetermined. The application receives the question, performs a search, builds a context window and asks the LLM to answer using that information. This makes the workflow comparatively predictable.</p>
+<p>That predictability is useful when the product requirement is mainly knowledge access. It also makes it easier to test individual stages such as retrieval relevance, context quality and final answer groundedness.</p>
+<h3>AI agent architecture</h3>
+<p>An agent introduces a decision loop. The model can inspect available tools, decide which tool to call, receive the result and decide whether another action is needed. Microsoft describes agentic RAG in similar terms: retrieval becomes a tool that an agent can invoke when needed, allowing dynamic source selection, iterative retrieval and multi-step reasoning. urlMicrosoft's agentic RAG architecture guidehttps://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/rag/rag-agentic</p>
+<div class="flow"><div><strong>Goal</strong><br>Understand the user's task</div><div><strong>Decision</strong><br>Select the next tool or action</div><div><strong>Tool call</strong><br>Search, calculate, query or act</div><div><strong>Observation</strong><br>Inspect the result</div><div><strong>Loop or finish</strong><br>Continue until the task is complete</div></div>
+</section>
+
+<section>
+<h2>RAG vs Agentic AI: don't confuse the terms</h2>
+<p>These concepts sit at different levels of an AI architecture:</p>
+<ul>
+<li><strong>RAG:</strong> a retrieval-and-generation pattern for bringing external knowledge into an LLM response.</li>
+<li><strong>AI agent:</strong> an application pattern that can select tools/actions and work through a task.</li>
+<li><strong>Agentic RAG:</strong> an architecture in which the agent controls retrieval as part of its reasoning loop.</li>
+</ul>
+<p>A system can therefore be an agent without RAG, RAG without an agent, or an agent that uses RAG as one of its tools. AWS defines agentic RAG as a pattern where the agent actively controls when and how retrieval occurs and can evaluate whether retrieved context is sufficient. urlAWS Agentic AI definitionshttps://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/definitions.html</p>
+</section>
+
+<section>
+<h2>When should you use RAG?</h2>
+<p>RAG is a sensible starting point when the main requirement is trustworthy access to a defined knowledge collection and the workflow does not need autonomous multi-step action.</p>
+<h3>Examples</h3>
+<ul>
+<li><strong>Employee knowledge assistant:</strong> answer questions from HR, IT or operations documentation.</li>
+<li><strong>Product support assistant:</strong> retrieve troubleshooting steps from manuals and support articles.</li>
+<li><strong>Developer documentation search:</strong> retrieve relevant API or architecture documentation before answering.</li>
+<li><strong>Policy assistant:</strong> find the relevant policy sections and explain them with source context.</li>
+<li><strong>Research assistant:</strong> retrieve documents from a controlled corpus and summarize evidence.</li>
+</ul>
+<p>A practical signal is that most requests can be answered after one well-designed retrieval operation against an appropriate knowledge source. Microsoft notes that standard RAG works well for queries that map to a single search against a single index. urlMicrosoft RAG design guidancehttps://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/rag/rag-solution-design-and-evaluation-guide</p>
+</section>
+
+<section>
+<h2>When should you use an AI agent?</h2>
+<p>An agent becomes more relevant when the system must make runtime decisions about a sequence of actions rather than simply retrieve and explain information.</p>
+<h3>Examples</h3>
+<ul>
+<li><strong>IT operations:</strong> inspect an alert, query monitoring data, diagnose likely causes and open a ticket.</li>
+<li><strong>Customer operations:</strong> check an order, retrieve account information and initiate an allowed workflow.</li>
+<li><strong>Research workflow:</strong> search several sources, compare findings, perform calculations and prepare a structured result.</li>
+<li><strong>Business operations:</strong> gather information from multiple systems and execute approved actions through APIs.</li>
+<li><strong>Developer workflow:</strong> inspect documentation, run tools, analyze outputs and iterate on a task.</li>
+</ul>
+<p>The key is not simply “more intelligence.” It is <strong>dynamic orchestration</strong>: the system needs to determine what to do next based on intermediate results.</p>
+</section>
+
+<section>
+<h2>When should you combine RAG and AI agents?</h2>
+<p>Use both when an agent needs reliable domain knowledge <em>and</em> the ability to reason through multiple steps or take controlled actions. This is often called <strong>agentic RAG</strong>.</p>
+<p>For example, imagine an enterprise assistant receives: <em>“Find the relevant procurement policy, check whether this purchase meets the policy, calculate the remaining budget and prepare the approval request.”</em></p>
+<p>A useful architecture could let the agent:</p>
+<ol>
+<li>Retrieve the current procurement policy.</li>
+<li>Query the purchase record.</li>
+<li>Retrieve the relevant budget information.</li>
+<li>Compare the facts against the policy.</li>
+<li>Calculate or validate the remaining amount.</li>
+<li>Prepare an approval request without submitting it until the required human approval is received.</li>
+</ol>
+<p>Here RAG handles knowledge retrieval, while the agent coordinates the multi-step workflow. Microsoft specifically describes agentic RAG as useful for multistep reasoning, dynamic source selection and iterative retrieval. urlMicrosoft's agentic RAG guidancehttps://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/rag/rag-agentic</p>
+</section>
+
+<section>
+<h2>RAG vs AI Agents: enterprise architecture considerations</h2>
+<p>Moving from a demo to an enterprise system changes the design problem. The question is no longer only “Can the model answer?” It becomes “Can the system retrieve the right information, respect permissions, explain what it did, and behave safely when a tool fails?”</p>
+<h3>1. Security and permissions</h3>
+<p>Retrieval should respect the user's authorization. An agent should also be restricted to the tools and actions it is allowed to use. AWS guidance highlights authorization for tool execution and role-based access controls for enterprise knowledge sources. urlAWS enterprise agent architecture guidancehttps://docs.aws.amazon.com/prescriptive-guidance/latest/govern-architect-agentic-ai/enterprise-architecture.html</p>
+<h3>2. Hallucination and grounding</h3>
+<p>RAG can ground responses in retrieved information, but retrieval quality still matters. Poor chunks, stale documents, irrelevant results or missing context can produce weak answers. AWS notes that RAG grounds model responses in external, domain-specific knowledge, while freshness and retrieval failure handling remain important design considerations. urlAWS grounding and RAG guidancehttps://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-serverless/grounding-and-rag.html</p>
+<h3>3. Tool safety</h3>
+<p>An agent that can send emails, change records, issue refunds or modify infrastructure has a larger failure surface than a read-only RAG assistant. Apply least privilege, explicit tool descriptions, validation, rate limits and human approval for high-impact actions.</p>
+<h3>4. Observability</h3>
+<p>For RAG, monitor retrieval quality, latency, context selection and answer groundedness. For agents, also monitor tool selection, action sequences, failures, loops, token usage and final task success.</p>
+<h3>5. Evaluation</h3>
+<p>Do not evaluate only the final text. Test retrieval separately, tool calls separately and the end-to-end task separately. Microsoft recommends structured evaluation across RAG design choices such as chunking, embeddings, search configuration and end-to-end response quality. urlMicrosoft RAG evaluation guidancehttps://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/rag/rag-solution-design-and-evaluation-guide</p>
+</section>
+
+<section>
+<h2>Tools and technologies used in RAG and AI agent systems</h2>
+<p>The exact stack depends on the application. The important skill is understanding the role of each component rather than memorizing a particular vendor stack.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Layer</th><th>Common role</th></tr></thead>
+<tbody>
+<tr><td>LLM</td><td>Generation, reasoning, classification or decision support</td></tr>
+<tr><td>Embeddings</td><td>Represent text or other content for semantic retrieval</td></tr>
+<tr><td>Vector / search index</td><td>Find relevant chunks or records</td></tr>
+<tr><td>Reranking</td><td>Improve ordering of retrieved candidates</td></tr>
+<tr><td>Agent runtime</td><td>Manage tool calls, state and reasoning loops</td></tr>
+<tr><td>Tools / APIs</td><td>Perform searches, calculations, database queries or business actions</td></tr>
+<tr><td>Memory / state</td><td>Maintain useful session or long-term information where appropriate</td></tr>
+<tr><td>Observability</td><td>Trace retrieval, model calls, tool calls, errors and outcomes</td></tr>
+<tr><td>Guardrails</td><td>Control data access, tool permissions and unsafe actions</td></tr>
+</tbody></table></div>
+</section>
+
+<section>
+<h2>Practical implementation workflow</h2>
+<p>If you are building your first system, avoid starting with a complex multi-agent architecture. Begin with the smallest architecture that can satisfy the task and add complexity only when testing shows a real need.</p>
+<ol>
+<li><strong>Define the task:</strong> write down what the system must answer or accomplish.</li>
+<li><strong>Separate knowledge from actions:</strong> identify what must be retrieved and what must be executed.</li>
+<li><strong>Build a baseline:</strong> start with a simple LLM or standard RAG workflow where appropriate.</li>
+<li><strong>Measure failures:</strong> collect real questions, missing knowledge cases, retrieval misses and incorrect outputs.</li>
+<li><strong>Add tools only when necessary:</strong> give an agent the smallest useful tool set.</li>
+<li><strong>Add an iterative loop:</strong> allow repeated retrieval or actions only when the task genuinely needs them.</li>
+<li><strong>Add permissions and approval:</strong> protect sensitive data and high-impact actions.</li>
+<li><strong>Evaluate end to end:</strong> measure both answer quality and task completion.</li>
+</ol>
+<p>This approach keeps the architecture understandable and makes failures easier to diagnose.</p>
+</section>
+
+<section>
+<h2>Mini project: build a RAG + AI agent system</h2>
+<p>A useful portfolio project is an <strong>IT support agent with a company knowledge base</strong>.</p>
+<h3>Architecture</h3>
+<ul>
+<li>Documentation stored in a controlled knowledge source.</li>
+<li>Chunking and indexing pipeline for retrieval.</li>
+<li>RAG search tool for retrieving troubleshooting guidance.</li>
+<li>Agent with tools for ticket lookup and ticket creation.</li>
+<li>Permission checks before exposing ticket data.</li>
+<li>Human approval before creating a high-impact ticket or changing an account.</li>
+<li>Tracing for retrieval results, tool calls and final outcomes.</li>
+</ul>
+<h3>Example task</h3>
+<p>“Check the incident history for this service, retrieve the relevant troubleshooting procedure, summarize the likely next step and prepare a ticket update.”</p>
+<p>This project demonstrates more than a chatbot: it shows retrieval, tool calling, orchestration, permissions, evaluation and a controlled human-in-the-loop workflow.</p>
+</section>
+
+<section>
+<h2>Common architecture mistakes</h2>
+<ul>
+<li><strong>Using an agent for every problem:</strong> a fixed RAG pipeline may be simpler when the task is primarily retrieval and generation.</li>
+<li><strong>Calling everything RAG:</strong> RAG is specifically about augmenting generation with retrieved external context; a generic API call is not automatically RAG.</li>
+<li><strong>Giving agents too many tools:</strong> unnecessary tools increase decision complexity and the potential impact of errors.</li>
+<li><strong>Ignoring retrieval quality:</strong> a capable LLM cannot compensate for consistently irrelevant or stale context.</li>
+<li><strong>Skipping evaluation:</strong> demos can look impressive while failing on realistic edge cases.</li>
+<li><strong>Allowing unrestricted actions:</strong> production agents should operate with least privilege and appropriate approval boundaries.</li>
+<li><strong>Starting with multi-agent systems:</strong> first prove that a simpler architecture cannot solve the problem.</li>
+</ul>
+</section>
+
+<section>
+<h2>How to learn RAG, AI agents and Agentic AI</h2>
+<p>A practical learning sequence is:</p>
+<ol>
+<li>Learn Python, APIs, JSON and basic software engineering.</li>
+<li>Understand LLM prompting, context windows and embeddings.</li>
+<li>Build a simple RAG application.</li>
+<li>Learn vector search, metadata filtering, chunking, reranking and retrieval evaluation.</li>
+<li>Build a tool-using AI agent.</li>
+<li>Learn agent state, memory, orchestration and human-in-the-loop patterns.</li>
+<li>Combine retrieval and tool use into an agentic RAG project.</li>
+<li>Study security, observability, evaluation and production deployment.</li>
+</ol>
+<p>If you want a structured path focused specifically on building agent-based systems, you can also use this <a href="https://www.techpratham.com/courses/master-in-agentic-ai">Master in Agentic AI</a> resource to explore the learning areas and practical skills involved. The goal should be to understand the architecture first and then select frameworks or platforms that fit the project.</p>
+</section>
+
+<section>
+<h2>Frequently asked questions</h2>
+<div class="faq"><h3>Is RAG the same as an AI agent?</h3><p>No. RAG is a retrieval-and-generation pattern, while an AI agent is an application pattern that can make runtime decisions and use tools to work toward a goal.</p></div>
+<div class="faq"><h3>Can an AI agent use RAG?</h3><p>Yes. An agent can use retrieval as one of its tools. When the agent dynamically controls retrieval as part of its reasoning loop, this is commonly described as agentic RAG.</p></div>
+<div class="faq"><h3>Which is easier to build, RAG or an AI agent?</h3><p>A basic RAG pipeline is often simpler because its flow can be more deterministic. An agent usually adds tool selection, state, iterative execution and additional evaluation requirements.</p></div>
+<div class="faq"><h3>Does RAG prevent hallucinations?</h3><p>No. RAG can ground responses in retrieved information, but poor retrieval, incomplete sources, stale data or weak prompt/context handling can still produce incorrect answers.</p></div>
+<div class="faq"><h3>When should I use agentic RAG?</h3><p>Consider agentic RAG when a query requires multiple retrieval steps, dynamic source selection, query decomposition or retrieval combined with other actions.</p></div>
+<div class="faq"><h3>Do AI agents always need memory?</h3><p>No. Memory is useful when the application needs information to persist across steps or interactions, but not every agent requires long-term memory.</p></div>
+<div class="faq"><h3>Is a chatbot automatically an AI agent?</h3><p>No. A chatbot may simply generate responses from a prompt or RAG pipeline. It becomes more agent-like when it can select tools, take actions and iterate toward a task goal.</p></div>
+<div class="faq"><h3>Should beginners learn RAG before AI agents?</h3><p>Learning basic RAG first can be useful because it teaches retrieval, embeddings, context construction and evaluation. You can then add tool use and agent orchestration to understand the larger system.</p></div>
+</section>
+
+<section class="note">
+<h2>Key takeaway</h2>
+<p><strong>RAG and AI agents solve different architectural problems.</strong> RAG is primarily about giving an LLM relevant external knowledge. Agents are about deciding what actions to take and coordinating tools to achieve a goal. When a system needs both grounded knowledge and multi-step action, combining them into an agentic RAG architecture can make sense—but it also introduces more complexity, so security, permissions, observability and evaluation become essential.</p>
+</section>
+
+<section>
+<h2>Sources and further reading</h2>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/rag/rag-solution-design-and-evaluation-guide">Microsoft Azure Architecture Center: Design and develop a RAG solution</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/rag/rag-agentic">Microsoft Azure Architecture Center: Develop an agentic RAG solution</a></li>
+<li><a href="https://docs.aws.amazon.com/prescriptive-guidance/latest/retrieval-augmented-generation-options/what-is-rag.html">AWS Prescriptive Guidance: Understanding Retrieval Augmented Generation</a></li>
+<li><a href="https://docs.aws.amazon.com/prescriptive-guidance/latest/govern-architect-agentic-ai/enterprise-architecture.html">AWS Prescriptive Guidance: Agentic AI architecture in the enterprise</a></li>
+<li><a href="https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/definitions.html">AWS Agentic AI Lens: Definitions</a></li>
+</ul>
+</section>
+</main>
+<footer><div class="container">Future Tech Career Hub · AI Learning Roadmap</div></footer>
+</body>
+</html>
